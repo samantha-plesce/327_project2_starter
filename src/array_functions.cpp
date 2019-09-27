@@ -115,8 +115,8 @@ void processToken(string &token){
 /*if you are debugging the file must be in the project parent directory
   in this case Project2 with the .project and .cProject files*/
 bool openFile(std::fstream& myfile, const std::string& myFileName,
-		std::ios_base::openmode mode){
-	myfile.open(myFileName.c_str(), fstream::in);
+		std::ios_base::openmode mode){//=std::ios_base::in
+	myfile.open(myFileName.c_str(), mode);
 	if (!myfile.is_open()){
 		bool closed = false;
 		return closed;
@@ -159,20 +159,31 @@ int writeArraytoFile(const string &outputfilename){
  * The presence of the enum implies a switch statement based on its value
  */
 void sortArray(constants::sortOrder so){
+	entry tracker;
 	switch(so) {
-	case constants::NONE:
-		break;
-	case constants::ASCENDING:
-		for(int i = 0; i< getArraySize(); i++) {
-				for(int j = i+1; j<getArraySize(); j++) {
-					if(myGlobalArray[j].word < myGlobalArray[i].word){
-						entry temp = myGlobalArray[i];
-						myGlobalArray[i] = myGlobalArray[j];
-						myGlobalArray[j] = temp;
-					}
+	case constants::NONE:{
+		break;}
+	case constants::ASCENDING:{
+		bool exchange = true;
+		while(exchange){
+				exchange = false;
+				for(int i = 0; i< nextAvailable -1; i++) {
+						string mWord = myGlobalArray[i].word;
+						string comparision = myGlobalArray[i+1].word;
+
+						toUpper(mWord);
+						toUpper(comparision);
+						if(mWord > comparision){
+							exchange = true;
+							entry hold = myGlobalArray[i];
+							myGlobalArray[i] = myGlobalArray[i+1];
+							myGlobalArray[i+1] = hold;
+						}
 				}
 		}
-		break;
+break;
+	}
+
 	case constants::DESCENDING:
 		for(int i=0; i< getArraySize(); i++){
 			for(int j=i+1; j<getArraySize(); j++){
